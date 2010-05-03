@@ -1,17 +1,19 @@
+require 'date'
+
 class Spanner
 
   ParseError = Class.new(RuntimeError)
 
   def self.parse(str, opts = nil)
-    Spanner.new(str, opts).parse
+    Spanner.new(opts).parse(str)
   end
   
   attr_reader :value, :raise_on_error, :from
   
-  def initialize(value, opts)
+  def initialize(opts)
     @value = value
     @on_error = opts && opts.key?(:on_error) ? opts[:on_error] : :raise
-    
+    @length_of_month = opts && opts[:length_of_month]
     
     @from = if opts && opts.key?(:from)
       case opts[:from]
@@ -25,13 +27,21 @@ class Spanner
     end
   end
   
+  def self.days_in_month(year, month)
+    (Date.new(year, 12, 31) << (12-month)).day
+  end
+  
+  def length_of_month
+    @length_of_month ||= Spanner.parse("#{Spanner.days_in_month(Time.new.year, Time.new.month)} days")
+  end
+  
   def error(err)
     if on_error == :raise
       raise ParseError.new(err)
     end
   end
   
-  def parse
+  def parse(value)
     parts = []
     part_contextualized = nil
     value.scan(/[\+\-]?(?:\d*\.\d+|\d+)|[a-z]+/i).each do |part|
@@ -56,13 +66,13 @@ class Spanner
         when 'm', 'min', 'minutes'  then 60
         when 'd', 'days'            then 86_400
         when 'w', 'wks', 'weeks'    then 604_800
-        when 'months', 'month', 'm' then 2_629_743.83
+        when 'months', 'month', 'M' then length_of_month
         when 'years', 'y'           then 31_556_926
         when /\As/                  then 1
         when /\Am/                  then 60
         when /\Ah/                  then 86_400
         when /\Aw/                  then 604_800
-        when /\Am/                  then 2_629_743.83
+        when /\AM/                  then length_of_month
         when /\Ay/                  then 31_556_926
         end
         
