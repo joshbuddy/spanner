@@ -1,14 +1,15 @@
-= Spanner
+# Spanner
 
 Easy way to parse natural language time spans as periods expressed in seconds. Supports float point notions of spans as well.
 
-== Usage
+## Usage
 
-  require 'spanner'
-  
-  Spanner.parse('1s')
-  => 1
-  
-  Spanner.parse('23 hours 12 minutes')
-  => 83520
+```ruby
+require 'spanner'
 
+Spanner.parse('1s')
+# 1
+
+Spanner.parse('23 hours 12 minutes')
+# 83520
+```
