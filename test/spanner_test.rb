@@ -10,7 +10,7 @@ describe Spanner do
   end
 
   #simple
-  { '.5s' => 0.5, '1s' => 1, '1.5s' => 1.5, '1m' => 60, '1.5m' => 90, '1d' => 86400, '1.7233312d' => 148895.81568, '1M' => Spanner.days_in_month(Time.new.year, Time.new.month) * 24 * 60 * 60 }.each do |input, output|
+  { '.5s' => 0.5, '1s' => 1, '1.5s' => 1.5, '1m' => 60, '1.5m' => 90, '1hr' => 3600, '1d' => 86400, '1 day' => 86400, '1.7233312d' => 148895.81568, '1M' => Spanner.days_in_month(Time.new.year, Time.new.month) * 24 * 60 * 60 }.each do |input, output|
     it "should parse #{input} and return #{output}" do
       assert_equal output, Spanner.parse(input)
     end
