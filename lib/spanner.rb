@@ -62,8 +62,8 @@ class Spanner
         # part is context
         multiplier = case part
                      when "s", "sec", "seconds" then 1
-                     when "h", "hours", "hrs" then 3600
                      when "m", "min", "minutes" then 60
+                     when "h", "hours", "hrs" then 3600
                      when "d", "days" then 86_400
                      when "w", "wks", "weeks" then 604_800
                      when "months", "month", "M" then length_of_month
